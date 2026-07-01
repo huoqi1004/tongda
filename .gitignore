@@ -1,0 +1,33 @@
+# 依赖
+node_modules/
+
+# 环境变量（包含敏感信息，不能提交）
+.env
+.env.local
+.env.*.local
+
+# 构建产物
+dist/
+dist-ssr/
+
+# 上传文件
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# 日志
+*.log
+npm-debug.log*
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 截图/临时文件
+screenshot_*.png
