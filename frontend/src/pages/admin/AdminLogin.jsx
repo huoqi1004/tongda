@@ -19,8 +19,8 @@ export default function AdminLogin() {
     setLoading(true)
     try {
       const res = await api.post('/admin/login', form)
-      localStorage.setItem('adminToken', res.data.token)
-      localStorage.setItem('adminUser', JSON.stringify(res.data.admin))
+      localStorage.setItem('adminToken', res.data.data.token)
+      localStorage.setItem('adminUser', JSON.stringify(res.data.data.admin))
       navigate('/admin/dashboard')
     } catch (err) {
       setError(err.response?.data?.message || '登录失败')

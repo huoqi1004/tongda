@@ -57,7 +57,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <p className="text-td-gray text-xs mb-1">公司地址</p>
-                      <p className="text-td-dark font-semibold">久和建材市场A区32-35</p>
+                      <p className="text-td-dark font-semibold">甘肃省兰州市安宁区兰州久和建材市场一号门A区32-35号</p>
                     </div>
                   </div>
 

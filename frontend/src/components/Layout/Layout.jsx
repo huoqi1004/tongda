@@ -206,7 +206,7 @@ export default function Layout() {
                 </div>
                 <div className="flex items-start gap-2">
                   <MapPin className="w-4 h-4 text-td-red mt-0.5 shrink-0" />
-                  <span>久和建材市场A区32-35</span>
+                  <span>甘肃省兰州市安宁区兰州久和建材市场一号门A区32-35号</span>
                 </div>
                 <div className="flex items-start gap-2">
                   <MessageCircle className="w-4 h-4 text-td-red mt-0.5 shrink-0" />

@@ -76,8 +76,17 @@ export default function ChatWidget() {
     <>
       {/* Floating Button */}
       {!open && (
-        <button onClick={() => setOpen(true)} className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-td-red text-white rounded-full shadow-lg hover:bg-td-red-dark transition-all flex items-center justify-center animate-bounce">
+        <button 
+          onClick={() => setOpen(true)} 
+          className="fixed bottom-6 right-6 z-50 w-14 h-14 bg-td-red text-white rounded-full shadow-lg hover:bg-td-red-dark transition-all flex items-center justify-center animate-bounce group"
+          title="问AI客服"
+          aria-label="打开AI客服"
+        >
           <MessageCircle className="w-6 h-6" />
+          {/* Tooltip */}
+          <span className="absolute right-16 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+            问AI客服
+          </span>
         </button>
       )}
 

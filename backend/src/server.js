@@ -16,6 +16,7 @@ import knowledgeRoutes from './routes/knowledge.js';
 import contactRoutes from './routes/contact.js';
 import uploadRoutes from './routes/upload.js';
 import passwordResetRoutes from './routes/passwordReset.js';
+import securityQuestionsRoutes from './routes/securityQuestions.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -33,6 +34,7 @@ app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api', passwordResetRoutes); // 密码找回路由（用户端 + 管理员端，路径已自带 /auth 或 /admin 前缀）
+app.use('/api', securityQuestionsRoutes); // 密保问题路由
 app.use('/api/products', productRoutes);
 app.use('/api/categories', categoryRoutes);
 app.use('/api/chat', chatRoutes);

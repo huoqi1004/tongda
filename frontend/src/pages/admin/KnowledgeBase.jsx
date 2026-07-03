@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Plus, Upload, Trash2, RefreshCw, Edit, X, Save } from 'lucide-react'
+import { Plus, Upload, Trash2, RefreshCw, Edit, X, Save, FileText, Image as ImageIcon } from 'lucide-react'
 import api from '../../api'
 
 export default function KnowledgeBase() {
@@ -8,15 +8,34 @@ export default function KnowledgeBase() {
   const [editingDoc, setEditingDoc] = useState(null)
   const [form, setForm] = useState({ title: '', content: '', category: 'general' })
   const [uploading, setUploading] = useState(false)
+  const [supportedTypes, setSupportedTypes] = useState(null)
+  const [uploadMessage, setUploadMessage] = useState('')
 
   const fetchDocs = async () => {
     try {
       const res = await api.get('/knowledge/docs')
-      setDocs(res.data.data?.items || res.data.data || res.data || [])
+      // 后端返回: { code:0, data: { list: [...] } }
+      // res (Axios) → res.data = { code:0, data: { list: [...] } }
+      // res.data.data = { list: [...] }
+      setDocs(res.data.data?.list || [])
     } catch { /* ignore */ } finally { setLoading(false) }
   }
 
-  useEffect(() => { fetchDocs() }, [])
+  const fetchSupportedTypes = async () => {
+    try {
+      const res = await api.get('/knowledge/supported-types')
+      if (res.data.code === 0) {
+        setSupportedTypes(res.data.data)
+      }
+    } catch (err) {
+      console.error('获取支持的文件类型失败:', err)
+    }
+  }
+
+  useEffect(() => { 
+    fetchDocs()
+    fetchSupportedTypes()
+  }, [])
 
   const handleSave = async () => {
     try {
@@ -39,16 +58,44 @@ export default function KnowledgeBase() {
   const handleUpload = async (e) => {
     const file = e.target.files[0]
     if (!file) return
+    
+    // 检查文件大小（10MB限制）
+    if (file.size > 10 * 1024 * 1024) {
+      alert('文件大小不能超过10MB')
+      e.target.value = ''
+      return
+    }
+
     setUploading(true)
+    setUploadMessage('')
     const formData = new FormData()
     formData.append('file', file)
+    
+    // 获取文件扩展名
+    const fileName = file.name.toLowerCase()
+    const ext = fileName.substring(fileName.lastIndexOf('.'))
+    
     try {
-      await api.post('/knowledge/upload', formData)
-      fetchDocs()
-      alert('上传成功，文档已自动切分并向量化')
-    } catch { alert('上传失败') }
-    setUploading(false)
-    e.target.value = ''
+      const res = await api.post('/knowledge/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      
+      if (res.data.code === 0) {
+        setUploadMessage(`✅ ${res.data.message}`)
+        if (res.data.data.isImage) {
+          setUploadMessage(`${res.data.message}\n\n💡 提示：图片需要配置OCR服务才能识别内容`)
+        }
+        fetchDocs()
+      } else {
+        setUploadMessage(`❌ ${res.data.message}`)
+      }
+    } catch (err) {
+      setUploadMessage(`❌ 上传失败: ${err.response?.data?.message || err.message}`)
+    } finally {
+      setUploading(false)
+      e.target.value = ''
+      setTimeout(() => setUploadMessage(''), 5000)
+    }
   }
 
   if (loading) return <div className="text-center py-12 text-td-gray">加载中...</div>
@@ -60,13 +107,60 @@ export default function KnowledgeBase() {
         <div className="flex items-center gap-3">
           <label className="flex items-center gap-2 px-4 py-2 border border-td-red text-td-red rounded-lg text-sm cursor-pointer hover:bg-red-50 transition-colors">
             <Upload className="w-4 h-4" /> {uploading ? '上传中...' : '上传文档'}
-            <input type="file" accept=".pdf,.doc,.docx,.md,.txt" onChange={handleUpload} className="hidden" />
+            <input 
+              type="file" 
+              accept=".pdf,.doc,.docx,.md,.txt,.html,.csv,.json,.jpg,.jpeg,.png,.gif,.bmp" 
+              onChange={handleUpload} 
+              className="hidden" 
+            />
           </label>
           <button onClick={() => { setEditingDoc('new'); setForm({ title: '', content: '', category: 'general' }) }} className="flex items-center gap-2 px-4 py-2 bg-td-red text-white rounded-lg text-sm hover:bg-td-red-dark">
             <Plus className="w-4 h-4" /> 新增文档
           </button>
         </div>
       </div>
+
+      {/* 上传提示信息 */}
+      {supportedTypes && (
+        <div className="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <h4 className="text-sm font-semibold text-blue-800 mb-2">📁 支持的文件格式</h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+            <div>
+              <p className="font-medium text-blue-700 mb-1">📄 文档类型：</p>
+              <div className="flex flex-wrap gap-1">
+                {supportedTypes.documents.map((type) => (
+                  <span key={type.ext} className="px-2 py-1 bg-white rounded border border-blue-200 text-blue-600">
+                    {type.ext.toUpperCase()}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="font-medium text-blue-700 mb-1">🖼️ 图片类型：</p>
+              <div className="flex flex-wrap gap-1">
+                {supportedTypes.images.map((type) => (
+                  <span key={type.ext} className="px-2 py-1 bg-white rounded border border-blue-200 text-blue-600">
+                    {type.ext.toUpperCase()}
+                    {type.ocr && ' (需OCR)'}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+          <p className="text-blue-600 mt-2">💡 提示：文档会自动提取文字内容并建立索引，图片需要配置OCR服务才能识别文字</p>
+        </div>
+      )}
+
+      {/* 上传消息提示 */}
+      {uploadMessage && (
+        <div className={`mb-4 p-3 rounded-lg text-sm ${
+          uploadMessage.startsWith('✅') ? 'bg-green-50 text-green-700 border border-green-200' :
+          uploadMessage.startsWith('❌') ? 'bg-red-50 text-red-700 border border-red-200' :
+          'bg-blue-50 text-blue-700 border border-blue-200'
+        }`}>
+          <pre className="whitespace-pre-wrap">{uploadMessage}</pre>
+        </div>
+      )}
 
       {/* Edit Form */}
       {editingDoc && (

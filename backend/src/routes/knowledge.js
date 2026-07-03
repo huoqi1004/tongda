@@ -2,13 +2,23 @@ import { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { promises as fs } from 'fs';
 import pool from '../config/db.js';
 import { adminMiddleware } from '../middleware/auth.js';
 import { chunkText } from '../services/vectorService.js';
 import { getEmbedding } from '../services/deepseekService.js';
+import fileParserService from '../services/fileParserService.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// 支持的文件类型
+const SUPPORTED_EXTENSIONS = [
+  // 文档类型
+  '.txt', '.md', '.docx', '.pdf', '.html', '.csv', '.json',
+  // 图片类型
+  '.jpg', '.jpeg', '.png', '.gif', '.bmp'
+];
 
 // 文件上传配置
 const storage = multer.diskStorage({
@@ -25,23 +35,40 @@ const upload = multer({
   storage,
   limits: { fileSize: parseInt(process.env.MAX_FILE_SIZE) || 10485760 },
   fileFilter: (req, file, cb) => {
-    const allowed = ['.txt', '.pdf', '.doc', '.docx', '.md', '.html', '.csv', '.json'];
     const ext = path.extname(file.originalname).toLowerCase();
-    if (allowed.includes(ext)) {
+    if (SUPPORTED_EXTENSIONS.includes(ext)) {
       cb(null, true);
     } else {
-      cb(new Error('不支持的文件类型，仅支持: ' + allowed.join(', ')));
+      cb(new Error(`不支持的文件类型。支持的文件格式: ${SUPPORTED_EXTENSIONS.join(', ')}`));
     }
   },
 });
 
 const router = Router();
 
+// GET /supported-types - 获取支持的文件类型列表
+router.get('/supported-types', async (req, res) => {
+  try {
+    const types = fileParserService.getSupportedTypes();
+    res.json({
+      code: 0,
+      message: '获取成功',
+      data: types
+    });
+  } catch (error) {
+    console.error('获取支持的文件类型失败:', error);
+    res.status(500).json({ code: 500, message: '获取失败', data: null });
+  }
+});
+
 // GET /docs - 获取知识文档列表
 router.get('/docs', adminMiddleware, async (req, res) => {
   try {
     const [docs] = await pool.query(
-      'SELECT id, title, category, chunk_count, is_active, file_type, created_at, updated_at FROM knowledge_docs ORDER BY created_at DESC'
+      `SELECT id, title, category, content, chunk_count, 
+              CASE WHEN chunk_count > 0 THEN 1 ELSE 0 END as vectorized,
+              is_active, file_type, file_url, created_at, updated_at 
+       FROM knowledge_docs ORDER BY created_at DESC`
     );
     res.json({ code: 0, message: '获取成功', data: { list: docs } });
   } catch (error) {
@@ -162,12 +189,16 @@ router.post('/upload', adminMiddleware, upload.single('file'), async (req, res) 
     const fileUrl = `/uploads/${req.file.filename}`;
     const fileType = path.extname(req.file.originalname);
 
-    // 读取文件内容（仅支持txt/md等文本文件）
-    let content = '';
-    const fs = await import('fs');
-    if (['.txt', '.md', '.html', '.csv', '.json'].includes(fileType.toLowerCase())) {
-      content = fs.readFileSync(req.file.path, 'utf-8');
+    // 解析文件内容
+    const parserResult = await fileParserService.parseFile(req.file.path, fileType);
+
+    if (!parserResult.success) {
+      console.warn(`文件解析警告: ${parserResult.message}`);
     }
+
+    let content = parserResult.content || '';
+    let chunkCount = 0;
+    let isImage = parserResult.isImage || false;
 
     const [result] = await pool.query(
       'INSERT INTO knowledge_docs (title, category, content, file_url, file_type) VALUES (?, ?, ?, ?, ?)',
@@ -176,8 +207,8 @@ router.post('/upload', adminMiddleware, upload.single('file'), async (req, res) 
 
     const docId = result.insertId;
 
-    // 分块并向量化
-    if (content) {
+    // 分块并向量化（非图片文件）
+    if (content && !isImage) {
       const chunkSize = parseInt(process.env.RAG_CHUNK_SIZE) || 500;
       const overlap = parseInt(process.env.RAG_CHUNK_OVERLAP) || 50;
       const chunks = chunkText(content, chunkSize, overlap);
@@ -190,17 +221,33 @@ router.post('/upload', adminMiddleware, upload.single('file'), async (req, res) 
         );
       }
 
-      await pool.query('UPDATE knowledge_docs SET chunk_count = ? WHERE id = ?', [chunks.length, docId]);
+      chunkCount = chunks.length;
+      await pool.query('UPDATE knowledge_docs SET chunk_count = ? WHERE id = ?', [chunkCount, docId]);
+    }
+
+    // 清理临时上传文件
+    try {
+      await fs.unlink(req.file.path);
+    } catch (cleanupError) {
+      console.warn('清理临时文件失败:', cleanupError.message);
     }
 
     res.json({
       code: 0,
-      message: '文件上传成功',
-      data: { id: docId, fileUrl, chunkCount: content ? '已分块' : 0 },
+      message: isImage 
+        ? '图片文件已上传（需要配置OCR服务才能识别图片内容）' 
+        : '文件上传成功',
+      data: { 
+        id: docId, 
+        fileUrl, 
+        chunkCount: chunkCount || (isImage ? '需OCR' : 0),
+        isImage,
+        parserMessage: parserResult.message
+      },
     });
   } catch (error) {
     console.error('上传文档失败:', error);
-    res.status(500).json({ code: 500, message: '上传文档失败', data: null });
+    res.status(500).json({ code: 500, message: `上传文档失败: ${error.message}`, data: null });
   }
 });
 

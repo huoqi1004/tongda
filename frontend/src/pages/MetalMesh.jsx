@@ -4,90 +4,77 @@ import { ArrowRight } from 'lucide-react'
 
 const tabs = [
   { key: 'all', label: '全部' },
-  { key: 'stainless', label: '不锈钢网' },
+  { key: 'woven', label: '编织网' },
+  { key: 'steel-plate', label: '钢板网' },
   { key: 'building', label: '建筑网片' },
-  { key: 'steel', label: '钢丝网' },
-  { key: 'iron', label: '铁丝网' },
-  { key: 'plate', label: '钢板网' },
-  { key: 'welded', label: '电焊网' },
-  { key: 'mesh', label: '网格布' },
+  { key: 'gabion', label: '石笼格栅' },
 ]
 
 const products = [
   {
-    id: 1, category: 'stainless', name: '不锈钢编织网', desc: '采用304/316L不锈钢丝编织而成，耐酸碱、耐腐蚀、耐高温，广泛应用于化工过滤、食品加工、石油开采等领域。',
-    img: '/images/微信图片_20260621172337_326_186.jpg',
-    specs: '目数：1-500目 | 丝径：0.02-3mm | 宽度：0.5-6m',
+    id: 1, category: 'woven', name: '荷兰网', desc: '以低碳钢丝焊接成方形网片，表面高温浸裹绿色PVC塑料层，网身带波浪弯折造型，柔韧性好、不易变形。防腐耐候、安装简单、性价比高，整卷出厂裁剪铺设方便。',
+    img: '/images/helan-wang.jpg',
+    specs: '丝径：1.2-3mm | 网孔：50x50mm | 宽度：0.9-1.8m | 表面：PVC浸塑',
   },
   {
-    id: 2, category: 'stainless', name: '不锈钢方孔网', desc: '不锈钢丝经轧制后编织而成，网孔方正均匀，表面平整光滑，适用于精密过滤、筛分分离等场景。',
-    img: '/images/微信图片_20260621172339_328_186.jpg',
-    specs: '孔径：0.5-50mm | 丝径：0.1-2mm | 宽度：1-3m',
+    id: 2, category: 'woven', name: '电焊网', desc: '由细铁丝横竖点焊成型，网孔均匀、焊点牢固，整卷包装方便裁剪运输。分热镀锌、冷镀锌、不锈钢三种材质，规格齐全可定制。',
+    img: '/images/dianhan-wang.jpg',
+    specs: '网孔：1×1-10×10cm | 丝径：0.3-3mm | 宽度：0.5-2m | 材质：热镀锌/冷镀锌/不锈钢',
   },
   {
-    id: 3, category: 'stainless', name: '不锈钢席型网', desc: '采用不同直径经丝和纬丝编织，过滤精度高，耐磨性强，广泛用于石油、化工、医药行业的液体过滤。',
-    img: '/images/微信图片_20260621172343_331_186.jpg',
-    specs: '目数：20-400目 | 宽度：1-2m | 材质：304/316L',
+    id: 3, category: 'steel-plate', name: '钢板网', desc: '3×6、5×10常规钢板网现货，红漆防锈。一体冲压菱形网，无焊点不开裂，规格齐全可按需裁剪。加厚重型款承重更强，脚手架踏板、基坑防护通用。',
+    img: '/images/gangban-wang.jpg',
+    specs: '网孔：3×6 / 5×10等 | 板厚：2-5mm | 材质：Q235钢板 | 表面：红漆防锈',
   },
   {
-    id: 4, category: 'building', name: '建筑网片', desc: '采用Q235优质低碳钢焊接而成，表面平整，网格均匀，焊接牢固，是建筑墙体防裂、保温层加固的理想材料。',
-    img: '/images/微信图片_20260621172346_333_186.jpg',
-    specs: '丝径：0.4-6mm | 孔径：12.7-200mm | 尺寸：1x2m / 1.2x2.4m',
+    id: 4, category: 'gabion', name: '双向塑料土工格栅', desc: '双向一体拉伸成型，纵横双向拉力均衡，抗拉伸、耐腐蚀、耐老化、不易断裂。适用公路乡村道路路基加固、边坡护坡、养殖场地面、堤坝挡土墙加筋。',
+    img: '/images/tugong-geshan.jpg',
+    specs: '网孔：25-40mm | 幅宽：2-4m | 材质：PP/HDPE | 拉伸方式：双向拉伸',
   },
   {
-    id: 5, category: 'building', name: '钢筋网片', desc: '采用CRB550级冷轧带肋钢筋焊接成型，强度高、刚度大，用于混凝土路面、桥梁、隧道等工程加固。',
-    img: '/images/微信图片_20260621172351_336_186.jpg',
-    specs: '钢筋直径：4-12mm | 网孔：100-300mm | 尺寸可定制',
+    id: 5, category: 'gabion', name: '石笼卷', desc: '采用热镀锌/镀铝锌低碳钢丝机器双绞编织成六角菱形网，双绞合编织结构韧性强，镀锌防腐防锈，透水透气，整卷可自由裁剪，配套成品石笼框现货。',
+    img: '/images/shilong-juan.jpg',
+    specs: '网孔：60x80-100x120mm | 丝径：2.0-4.0mm | 材质：热镀锌钢丝 | 编织：双绞六角',
   },
   {
-    id: 6, category: 'building', name: '抹墙网', desc: '热镀锌钢丝焊接网，用于墙面抹灰层加固，防止墙面开裂脱落，施工方便，使用寿命长。',
-    img: '/images/微信图片_20260621172352_337_186.jpg',
-    specs: '丝径：0.5-1.5mm | 孔径：12.7-25.4mm | 宽度：0.6-1.2m',
+    id: 6, category: 'woven', name: '压花网', desc: '又称轧花网，先把金属丝预先轧出波浪纹路再经纬交叉编织，丝材带波浪咬合整体结实，承重抗冲击优于普通电焊网。材质常见热镀锌铁丝、不锈钢丝，防锈牢固。',
+    img: '/images/yahua-wang.jpg',
+    specs: '网孔：5-100mm | 丝径：1.0-12mm | 材质：热镀锌/不锈钢 | 编织：预弯双向',
   },
   {
-    id: 7, category: 'steel', name: '镀锌钢丝网', desc: '优质低碳钢丝经热镀锌处理后编织而成，防腐性能优越，用于围栏、养殖、防护等户外场景。',
-    img: '/images/微信图片_20260621172356_340_186.jpg',
-    specs: '丝径：0.5-4mm | 孔径：6-100mm | 宽度：1-3m',
+    id: 7, category: 'woven', name: '六角网', desc: '由低碳镀锌铁丝双绞合编织成六角网孔，整体柔性好，拉扯不易开扣，防锈耐腐蚀。细丝款用于抹墙防裂、养殖围网；粗丝款用于河道护坡、边坡固土。',
+    img: '/images/liujiao-wang.jpg',
+    specs: '网孔：25-100mm | 丝径：0.5-4mm | 材质：镀锌钢丝 | 编织：双绞拧花',
   },
   {
-    id: 8, category: 'steel', name: 'PVC包塑钢丝网', desc: '在镀锌钢丝外层包覆PVC塑料，兼具防腐与美观，颜色可选绿、白、灰等，广泛用于围栏和装饰。',
-    img: '/images/微信图片_20260621172359_343_186.jpg',
-    specs: '丝径：1-4mm | 孔径：25-100mm | 颜色：绿/白/灰',
+    id: 8, category: 'steel-plate', name: '美格网', desc: '由镀锌/浸塑钢管冲压焊接而成，网孔为大菱形，一体折弯成型，板材厚实抗撞击。粗方管焊接强度高，防盗防破坏效果好，菱形大网孔透光通风不遮挡采光。',
+    img: '/images/meige-wang.jpg',
+    specs: '网孔：菱形 | 管材：方管 | 材质：镀锌/浸塑 | 用途：门窗防盗',
   },
   {
-    id: 9, category: 'iron', name: '黑铁丝网', desc: '低碳钢丝编织而成，价格经济实惠，广泛用于建筑、养殖、围栏等一般用途。',
-    img: '/images/微信图片_20260621172403_346_186.jpg',
-    specs: '丝径：0.5-4mm | 孔径：6-100mm | 宽度：1-2m',
+    id: 9, category: 'building', name: '外墙耐碱网格布', desc: '材质为玻璃纤维编织，经耐碱乳液涂层处理，外墙保温抹灰工程专用。耐碱抗裂，抵御水泥砂浆碱性腐蚀，防止墙面开裂空鼓掉皮；韧性强拉力高，轻薄易施工。',
+    img: '/images/wangge-bu.jpg',
+    specs: '克重：60-300g/㎡ | 网孔：4x4 / 5x5mm | 幅宽：1-2m | 材质：玻璃纤维+耐碱涂层',
   },
   {
-    id: 10, category: 'iron', name: '镀锌铁丝网', desc: '铁丝经电镀锌或热镀锌处理后编织，防腐性能优于黑铁丝网，适用于户外围栏和防护。',
-    img: '/images/微信图片_20260621172405_348_186.jpg',
-    specs: '丝径：0.5-4mm | 孔径：6-100mm | 宽度：1-3m',
+    id: 10, category: 'building', name: '堵灰网', desc: '属于细丝密孔电焊网，丝细网密，和砂浆附着力强，轻薄易裁剪。主要用于烟道堵灰、建筑抹灰防裂、工程填缝等装修土建工程，是装修工地常用辅材。',
+    img: '/images/duhui-wang.jpg',
+    specs: '网孔：6-25mm | 丝径：0.3-0.8mm | 宽度：0.3-1m | 材质：黑丝/镀锌',
   },
   {
-    id: 11, category: 'plate', name: '钢板网', desc: '以优质钢板一次冲压拉伸成型，网孔均匀，坚固耐用，广泛用于建筑吊顶、平台踏板、防护罩等。',
-    img: '/images/微信图片_20260621172407_350_186.jpg',
-    specs: '板厚：0.5-8mm | 网孔：多种规格 | 宽度：1-2m',
+    id: 11, category: 'steel-plate', name: '圆孔网', desc: '以镀锌钢板、不锈钢板、铁板为原料，机器冲压出均匀圆形孔洞，板材平整，孔洞规整。通风透光过滤效果好，板材坚固耐磨，可裁剪折弯加工成各种设备护罩。',
+    img: '/images/yuankong-wang.jpg',
+    specs: '孔径：2-50mm | 板厚：0.5-5mm | 材质：不锈钢/镀锌板/铁板 | 排列：60°/45°/直排',
   },
   {
-    id: 12, category: 'plate', name: '铝板网', desc: '以铝板冲压拉伸成型，重量轻、耐腐蚀，用于装饰、过滤、通风等场合。',
-    img: '/images/微信图片_20260621172412_354_186.jpg',
-    specs: '板厚：0.3-3mm | 网孔：多种规格 | 宽度：1-1.5m',
+    id: 12, category: 'building', name: '钢筋网片', desc: '采用冷拔带肋钢筋横竖精密点焊成型，整片式钢筋网格，丝粗刚性强。焊点牢固拉力强度高，大幅提升混凝土结构整体性，代替人工绑扎钢筋省时省力。',
+    img: '/images/gangjin-wangpian.jpg',
+    specs: '钢筋直径：4-12mm | 网孔：100-300mm | 材质：CRB550冷轧带肋 | 焊接：自动电阻焊',
   },
   {
-    id: 13, category: 'welded', name: '电焊网片', desc: '优质低碳钢丝经自动焊接成型，网格均匀，焊点牢固，表面可镀锌或PVC处理，用途广泛。',
-    img: '/images/微信图片_20260621172414_355_186.jpg',
-    specs: '丝径：0.5-6mm | 孔径：12.7-200mm | 宽度：0.5-2m',
-  },
-  {
-    id: 14, category: 'mesh', name: '耐碱网格布', desc: '以中碱或无碱玻璃纤维纱编织，经耐碱涂层处理，用于建筑内外墙保温、防水、防裂。',
-    img: '/images/微信图片_20260621172415_356_186.jpg',
-    specs: '克重：60-300g/㎡ | 网孔：4x4 / 5x5mm | 宽度：1-2m',
-  },
-  {
-    id: 15, category: 'mesh', name: '玻璃纤维网格布', desc: '玻璃纤维编织后涂覆高分子乳液，强度高、耐碱性强，适用于GRC构件、石材背衬等。',
-    img: '/images/微信图片_20260621172421_361_186.jpg',
-    specs: '克重：80-200g/㎡ | 网孔：3x3 / 5x5mm | 宽度：1m',
+    id: 13, category: 'building', name: '镀锌网片', desc: '低碳钢丝焊接成型后整体热镀锌处理，整片式方形网格，焊点牢固，表面镀锌层防锈耐腐蚀。片状结构裁剪拼接安装方便，网孔规整，硬度高于卷装电焊网。',
+    img: '/images/duxin-wangpian.jpg',
+    specs: '丝径：0.5-6mm | 网孔：12.7-200mm | 材质：低碳钢丝 | 表面：热镀锌',
   },
 ]
 
@@ -102,7 +89,7 @@ export default function MetalMesh() {
       <section className="bg-gradient-to-r from-td-dark to-gray-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl sm:text-4xl font-bold mb-3">金属网产品中心</h1>
-          <p className="text-gray-300">提供不锈钢网、建筑网片、钢丝网、钢板网等全品类金属网产品</p>
+          <p className="text-gray-300">荷兰网、电焊网、钢板网、压花网、石笼网等全品类金属网产品</p>
         </div>
       </section>
 

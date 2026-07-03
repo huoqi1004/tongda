@@ -1,26 +1,15 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, Phone, Grid, Shield, Cone, Award, Truck, Ruler, Clock, Building2, Landmark, Construction, Fish } from 'lucide-react'
 
-const images = [
-  '/images/微信图片_20260621172337_326_186.jpg',
-  '/images/微信图片_20260621172339_328_186.jpg',
-  '/images/微信图片_20260621172343_331_186.jpg',
-  '/images/微信图片_20260621172346_333_186.jpg',
-  '/images/微信图片_20260621172351_336_186.jpg',
-  '/images/微信图片_20260621172352_337_186.jpg',
-  '/images/微信图片_20260621172356_340_186.jpg',
-  '/images/微信图片_20260621172359_343_186.jpg',
-]
-
 const featuredProducts = [
-  { id: 1, name: '不锈钢编织网', desc: '304/316L材质，耐腐蚀高强度', img: images[0] },
-  { id: 2, name: '建筑网片', desc: 'Q235优质钢材，焊接牢固', img: images[1] },
-  { id: 3, name: '公路防护网', desc: '热镀锌处理，防锈耐用', img: images[2] },
-  { id: 4, name: '锌钢护栏', desc: '静电喷涂，美观大方', img: images[3] },
-  { id: 5, name: '交通标志牌', desc: '反光膜覆面，清晰醒目', img: images[4] },
-  { id: 6, name: '电焊网片', desc: '网格均匀，抗拉强度高', img: images[5] },
-  { id: 7, name: '钢板网', desc: '一次冲压成型，坚固耐用', img: images[6] },
-  { id: 8, name: '铁路防护网', desc: '高强度低碳钢丝，安全可靠', img: images[7] },
+  { id: 1, name: '荷兰网', desc: 'PVC浸塑防腐，波浪弯折柔韧性好', img: '/images/helan-wang.jpg' },
+  { id: 2, name: '电焊网', desc: '焊点牢固，网孔均匀，整卷包装', img: '/images/dianhan-wang.jpg' },
+  { id: 3, name: '钢板网', desc: '一体冲压菱形网，无焊点不开裂', img: '/images/gangban-wang.jpg' },
+  { id: 5, name: '石笼卷', desc: '双绞六角编织，镀锌防腐防锈', img: '/images/shilong-juan.jpg' },
+  { id: 12, name: '钢筋网片', desc: '冷轧带肋钢筋焊接，省时省力', img: '/images/gangjin-wangpian.jpg' },
+  { id: 14, name: '双边丝护栏网', desc: '浸塑防腐，双边加固不易变形', img: '/images/shuangbi-hulan.jpg' },
+  { id: 19, name: '波形护栏', desc: '形变吸能缓冲，阻挡车辆冲出', img: '/images/boxing-hulan.jpg' },
+  { id: 25, name: '防撞桶', desc: '注水增重缓冲，红白反光醒目', img: '/images/fangzhuang-tong.jpg' },
 ]
 
 const advantages = [
@@ -31,10 +20,10 @@ const advantages = [
 ]
 
 const scenes = [
-  { icon: Building2, title: '建筑工程', desc: '建筑网片、钢筋网、抹墙网等建筑用网产品' },
-  { icon: Landmark, title: '公路交通', desc: '公路防护网、隔离栅、防眩网等交通安全设施' },
-  { icon: Construction, title: '市政工程', desc: '市政护栏、围挡、井盖防护网等市政配套产品' },
-  { icon: Fish, title: '养殖防护', desc: '养殖围网、鸡鸽兔笼、水产养殖网等农业用途' },
+  { icon: Building2, title: '建筑工程', desc: '钢筋网片、镀锌网片、堵灰网、网格布等建筑用网产品' },
+  { icon: Landmark, title: '公路交通', desc: '波形护栏、市政护栏、防撞桶、路锥等交通安全设施' },
+  { icon: Construction, title: '市政工程', desc: '市政道路护栏、施工围挡、钢格板等市政配套产品' },
+  { icon: Fish, title: '养殖防护', desc: '荷兰网、电焊网、六角网等养殖围网防护产品' },
 ]
 
 export default function Home() {
@@ -94,7 +83,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-td-dark mb-3">金属网类</h3>
                 <p className="text-td-gray text-sm leading-relaxed">
-                  不锈钢网、建筑网片、钢丝网、铁丝网、钢板网、电焊网、网格布等，广泛应用于建筑、过滤、筛分等领域。
+                  荷兰网、电焊网、钢板网、压花网、六角网、石笼网、钢筋网片、镀锌网片、网格布等，广泛应用于建筑、养殖、筛分、护坡等领域。
                 </p>
                 <span className="inline-flex items-center gap-1 mt-4 text-td-red text-sm font-medium group-hover:gap-2 transition-all">
                   查看详情 <ArrowRight className="w-4 h-4" />
@@ -109,7 +98,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-td-dark mb-3">护栏防护</h3>
                 <p className="text-td-gray text-sm leading-relaxed">
-                  公路防护网、铁路防护网、锌钢护栏、草坪护栏、市政护栏等，为各类工程提供安全防护解决方案。
+                  双边丝护栏网、波形护栏、市政道路护栏、锌钢围墙护栏、球场框网、基坑护栏、施工围挡等，为各类工程提供安全防护解决方案。
                 </p>
                 <span className="inline-flex items-center gap-1 mt-4 text-td-red text-sm font-medium group-hover:gap-2 transition-all">
                   查看详情 <ArrowRight className="w-4 h-4" />
@@ -124,7 +113,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-td-dark mb-3">交通设施</h3>
                 <p className="text-td-gray text-sm leading-relaxed">
-                  路面警示类、隔离警示类、防撞防护类、安全标识类、交通标识类等，保障道路通行安全。
+                  防撞桶、路锥、橡胶减速带、反光警示牌、反光膜、伸缩警戒带等，保障道路通行安全。
                 </p>
                 <span className="inline-flex items-center gap-1 mt-4 text-td-red text-sm font-medium group-hover:gap-2 transition-all">
                   查看详情 <ArrowRight className="w-4 h-4" />
